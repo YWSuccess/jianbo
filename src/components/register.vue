@@ -42,7 +42,7 @@ export default {
         let error_code = res.data.error_code;
           switch(error_code){
             case 0:
-              this.$router.push('/login')
+              this.$router.push({path:'/login',query:{username:this.username}})
               break;
             case 1211:
               alert('该账号已被注册！');

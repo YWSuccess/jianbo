@@ -1,5 +1,6 @@
 import register from './components/register'
 import login from './components/login'
+import addBlog from './components/addBlog'
 
 export default [
 	{
@@ -9,5 +10,9 @@ export default [
 	{
 		path:'/login',
 		component:login
+	},
+	{
+		path:'/addBlog',
+		component:addBlog
 	},
 ]
