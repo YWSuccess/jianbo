@@ -43,7 +43,7 @@ export default {
     },
     height: { // 初始化高度
       type: Number,
-      default: 600
+      default: 800
     }, // 宽度
     toolbars: { // 工具栏
       type: Object,
