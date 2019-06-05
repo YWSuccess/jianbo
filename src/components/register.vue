@@ -32,7 +32,7 @@ export default {
       }
     },
     register(){
-      this.$axios.post('register.php',{
+      this.$axios.post('/register.php',{
         username:this.username,
         password:this.password,
         email:this.email,
@@ -57,16 +57,20 @@ export default {
 </script>
 
 <style scoped>
-.login{
+.register{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 10%;
+  padding: 150px 10%;
+}
+h2{
+  font-size: 30px;
+  margin: 10px 0;
 }
 form{
   margin: 0 auto;
   max-width: 80%
 }
-form input{
+input{
   width: 100%;
   height: 50px;
   margin: 10px 0;
@@ -74,7 +78,6 @@ form input{
   box-sizing: border-box;
   font-size: 20px;
   border: 1px solid #aaa;
-  outline: none;
   border-radius: 5px;
 }
 input[type="submit"]{
@@ -82,10 +85,7 @@ input[type="submit"]{
   color:#fff;
   background-color: #ccc;
 }
-form .allowed{
+input.allowed{
   background-color: #10a7b8;
-}
-h2{
-  font-size: 30px;
 }
 </style>

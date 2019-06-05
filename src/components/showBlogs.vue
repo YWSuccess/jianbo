@@ -1,7 +1,8 @@
 <template>
   <div class="showBlogs">
+    <h2>博客列表</h2>
      <div v-for="blog,index in blogs" :key="index" class="blog">
-        <h2><router-link :to="'/blog/'+blog.blog_id">{{blog.blog_title}}</router-link></h2>
+        <h2 ><router-link v-rainbow="Math.random()" :to="'/blog/'+blog.blog_id">{{blog.blog_title}}</router-link></h2>
         <span>发表时间：{{blog.create_time}}</span>
         <span>分类：{{blog.category_name}}</span>
      </div>
@@ -14,6 +15,13 @@ export default {
   data(){
     return {
       blogs:[]
+    }
+  },
+  directives:{
+    rainbow:{
+      bind(el,binding,vnode){
+          el.style.color = '#'+binding.value.toString(16).slice(2,8)
+      }
     }
   },
   created(){
@@ -43,17 +51,21 @@ export default {
 .showBlogs{
   max-width: 800px;
   margin: 0 auto;
+  padding: 50px 0;
+}
+h2{
+  font-size: 30px;
+  margin-bottom: 10px;
 }
 .blog{
   max-width: 100%;
   margin: 10px 0 ;
-  padding: 10px;
-  background-color: #eee;
+  padding: 20px;
+  background-color: #fff;
   border: 1px dotted #000;
   border-radius: 5px;
 }
 a{
   text-decoration: none;
 }
-
 </style>

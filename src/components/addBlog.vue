@@ -6,7 +6,7 @@
         <option v-for="category,index in categories" :key="index" :value="category.category_id">{{category.category_name}}</option>
         <option value="_addCategory">添加分类</option>
       </select>
-      <input type="text" v-model="blog.title" placeholder="标题" @blur="check">
+      <input v-model="blog.title" placeholder="博客标题" @blur="check">
       <label><input type="checkbox" v-model="blog.private">仅本人可见</label>
       <mark-down ref="markdown" @on-save="save" :initialValue="blog.content"></mark-down>
       <input :disabled="!allowed" :class="{allowed:allowed}" type="submit" value="发表博客" @click.prevent="addBlog">
@@ -38,7 +38,7 @@ export default {
       if(e.target.value=="_addCategory"){
         let category_name = prompt("请输入分类名字");
         if(category_name){
-          this.$axios.post('addCategory.php',{
+          this.$axios.post('/addCategory.php',{
             category_name:category_name
           })
           .then(res=>{
@@ -78,7 +78,7 @@ export default {
     },
     addBlog(){
       this.$refs.markdown.handleSave();
-      this.$axios.post('addBlog.php',this.blog)
+      this.$axios.post('/addBlog.php',this.blog)
       .then(res=>{
         let error_code = res.data.error_code;
         switch(error_code){
@@ -91,7 +91,7 @@ export default {
     }
   },
   created(){
-    this.$axios.get('getCategories.php',{
+    this.$axios.get('/getCategories.php',{
         params:{
           u_id:1,
         }
@@ -118,21 +118,11 @@ export default {
 .addBlog{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 10%;
+  padding: 20px 10%;
 }
-form{
-  margin: 0 auto;
-  max-width: 100%
-}
-form input[type="text"]{
-  min-width: 200px;
-  overflow: hidden;
-  height: 30px;
-  padding: 0 10px;
-  font-size: 20px;
-  border: 1px solid #aaa;
-  outline: none;
-  border-radius: 5px;
+h2{
+  font-size: 30px;
+  margin: 10px 0;
 }
 select{
   max-width:150px;
@@ -141,8 +131,19 @@ select{
   height: 30px;
   box-sizing: border-box;
   border-radius: 5px;
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
   font-size: 16px;
+}
+input{
+  min-width: 200px;
+  height: 30px;
+  padding: 0 10px;
+  font-size: 20px;
+  box-sizing: border-box;
+  border: 1px solid #aaa;
+  outline: none;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 input[type="submit"]{
   height: 50px;
@@ -154,10 +155,15 @@ input[type="submit"]{
   color:#fff;
   background-color: #ccc;
 }
-form .allowed{
-  background-color: #10a7b8;
+input[type="checkbox"]{
+  vertical-align: middle;
+  text-align: center;
+  min-width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
 }
-h2{
-  font-size: 30px;
+input.allowed{
+  background-color: #10a7b8;
 }
 </style>

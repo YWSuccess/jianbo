@@ -54,10 +54,12 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 10px 10px 50px;
-  background-color: #f2f2f2;
+  background-color: #f1f1f1;
+  border-radius: 5px;
 }
 h2{
   font-size: 30px;
+  margin: 10px 0;
   text-align: center;
 }
 .infos{
@@ -70,9 +72,8 @@ h2{
  	margin: 10px auto;
  	padding: 10px;
  	background-color: #bbb;
-  	text-align: center;
-  	border-radius: 5px;
-  	color: #666;
+  text-align: center;
+  border-radius: 5px;
+  color: #666;
 }
-
 </style>

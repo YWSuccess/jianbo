@@ -5,7 +5,7 @@
       <input v-model="username" placeholder="账号" @blur="check">
       <input v-model="password" type="password" placeholder="密码" @keyup="check">
       <router-link to="/register">没有账号？立即注册</router-link>
-      <input :disabled="!allowed" :class="{allowed:allowed}" type="submit" value="登录" @click.prevent="login">
+      <input :disabled="!allowed" :class="{allowed:allowed}" type="submit" value="登 录" @click.prevent="login">
     </form>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
       }
     },
     login(){
-      this.$axios.post('login.php',{
+      this.$axios.post('/login.php',{
       	username:this.username,
       	password:this.password
       })
@@ -51,7 +51,7 @@ export default {
     }
   },
   created(){
-    this.username = this.$route.query.username || ''
+    this.username = this.$route.query.username
   }
 }
 </script>
@@ -60,13 +60,17 @@ export default {
 .login{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 50px 10%;
+  padding: 150px 10%;
+}
+h2{
+  font-size: 30px;
+  margin: 10px 0;
 }
 form{
   margin: 0 auto;
   max-width: 80%
 }
-form input{
+input{
   width: 100%;
   height: 50px;
   margin: 10px 0;
@@ -74,7 +78,6 @@ form input{
   box-sizing: border-box;
   font-size: 20px;
   border: 1px solid #aaa;
-  outline: none;
   border-radius: 5px;
 }
 input[type="submit"]{
@@ -82,10 +85,7 @@ input[type="submit"]{
   color:#fff;
   background-color: #ccc;
 }
-form .allowed{
+input.allowed{
   background-color: #10a7b8;
-}
-h2{
-  font-size: 30px;
 }
 </style>
