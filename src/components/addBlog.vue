@@ -118,7 +118,7 @@ export default {
 .addBlog{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 10%;
+  padding: 20px 5%;
 }
 h2{
   font-size: 30px;

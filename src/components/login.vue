@@ -30,8 +30,8 @@ export default {
     },
     login(){
       this.$axios.post('/login.php',{
-      	username:this.username,
-      	password:this.password
+        username:this.username,
+        password:this.password
       })
       .then(res=>{
         let error_code = res.data.error_code;
