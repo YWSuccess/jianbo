@@ -1,3 +1,4 @@
+import VueRouter from 'vue-router'
 import register from './components/register'
 import login from './components/login'
 import addBlog from './components/addBlog'
@@ -5,7 +6,7 @@ import editBlog from './components/editBlog'
 import showBlog from './components/showBlog'
 import showBlogs from './components/showBlogs'
 
-export default [
+const routes = [
 	{
 		path:'/register',
 		component:register
@@ -16,10 +17,16 @@ export default [
 	},
 	{
 		path:'/addBlog',
+    meta:{
+      login_required:true
+    },
 		component:addBlog
 	},
   {
     path:'/editBlog',
+    meta:{
+      login_required:true
+    },
     component:editBlog
   },
 	{
@@ -35,3 +42,17 @@ export default [
 		component:showBlogs
 	},
 ]
+
+const router = new VueRouter({
+  routes,
+  mode:'history'
+})
+
+router.beforeEach((to,from,next)=>{
+  if(!$cookies.isKey('u_id') && to.matched.some((item)=>item.meta.login_required))
+    next('/login');
+  else
+    next()
+})
+
+export default router
