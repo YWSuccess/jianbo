@@ -1,6 +1,7 @@
 import register from './components/register'
 import login from './components/login'
 import addBlog from './components/addBlog'
+import editBlog from './components/editBlog'
 import showBlog from './components/showBlog'
 import showBlogs from './components/showBlogs'
 
@@ -17,6 +18,10 @@ export default [
 		path:'/addBlog',
 		component:addBlog
 	},
+  {
+    path:'/editBlog',
+    component:editBlog
+  },
 	{
 		path:'/blog/:blog_id',
 		component:showBlog
