@@ -53,7 +53,7 @@ export default {
     },
     autoSave: { // 是否自动保存
       type: Boolean,
-      default: true
+      default: false
     },
     interval: { // 自动保存间隔 mm
       type: Number,
@@ -96,6 +96,11 @@ export default {
         ...defaultTools,
         ...toolbars
       }
+    }
+  },
+  created(){
+    if(this.preview==2){
+      this.height = this.initialValue.split('\n').length * 22 + 200;
     }
   },
   mounted() {

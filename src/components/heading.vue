@@ -1,8 +1,9 @@
 <template>
   <div class="heading">
-    <h1>简 博</h1>
-    <span class="login_icon" @click="login"></span>
-    <span v-if="" class="addBlog_icon" @click="addBlog"></span>
+    <h1><router-link to="/">简 博</router-link></h1>
+    <span class="login" @click="toLogin"></span>
+    <span v-if="this.$store.state.isLogin" class="addBlog" @click="toAddBlog"></span>
+    <span v-if="this.$store.state.isLogin" class="logout" @click="toLogout"></span>
   </div>
 </template>
 
@@ -14,16 +15,28 @@ export default {
       
     }
   },
+  mounted(){
+    this.$store.commit('updateIsLogin',this.$cookies.isKey('u_id'))
+  },
   methods:{
-    login(){
-      if(this.$cookies.get('u_id')){
-        this.$router.push(`/${this.$cookies.get('u_id')}`)
-      }else{
+    toLogin(){
+      if(!this.$cookies.isKey('u_id')){
         this.$router.push('/login')
+      }else{
+        this.$router.push({path:'/blogs',query:{u_id:this.$cookies.get('u_id')}})
       }
     },
-    addBlog(){
+    toAddBlog(){
       this.$router.push('/addBlog')
+    },
+    toLogout(){
+      this.$axios.get('/logout.php')
+      .then(res=>{
+        if(res.data.status_code==0){
+          this.$store.commit('updateIsLogin',this.$cookies.isKey('u_id'))
+          this.$router.push('/login')
+        }
+      })
     }
   }
 }
@@ -39,29 +52,48 @@ export default {
   position: relative;
   color: #fff;
 }
-.login_icon{
+.login{
   position: absolute;
-  width: 40px;
-  height: 40px;
-  top: 15px;
-  right: 15px;
+  width: 32px;
+  height: 32px;
+  top: 20px;
+  right: 10px;
   border-radius: 20px;
   background-color: #f2f2f2;
   background-image: url('../assets/login.png');
   background-size: cover;
+  cursor: pointer;
 }
-.addBlog_icon{
+.addBlog{
   position: absolute;
-  width: 40px;
-  height: 40px;
-  top: 15px;
-  right: 65px;
+  width: 32px;
+  height: 32px;
+  top: 20px;
+  right: 50px;
   border-radius: 20px;
   background-color: #f2f2f2;
   background-image: url('../assets/addBlog.png');
   background-size: cover;
+  cursor: pointer;
 }
-h1{
+.logout{
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: 20px;
+  right: 90px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  background-image: url('../assets/logout.png');
+  background-size: cover;
+  cursor: pointer;
+}
+h1 a{
+  color: #fff;
   font-size: 30px;
+  text-decoration: none;
+}
+h1 a:hover{
+  text-decoration: underline;
 }
 </style>

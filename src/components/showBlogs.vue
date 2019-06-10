@@ -2,9 +2,10 @@
   <div class="showBlogs">
     <h2>博客列表</h2>
      <div v-for="blog,index in blogs" :key="index" class="blog">
-        <h2 ><router-link v-rainbow="Math.random()" :to="'/blog/'+blog.blog_id">{{blog.blog_title}}</router-link></h2>
+        <h2><router-link v-rainbow="Math.random()" :to="'/blog/'+blog.blog_id">{{blog.title}}</router-link></h2>
+        <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
+        <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
         <span>发表时间：{{blog.create_time}}</span>
-        <span>分类：{{blog.category_name}}</span>
      </div>
   </div>
 </template>
@@ -20,38 +21,46 @@ export default {
   directives:{
     rainbow:{
       bind(el,binding,vnode){
-          el.style.color = '#'+binding.value.toString(16).slice(2,8)
+        el.style.color = '#'+binding.value.toString(16).slice(2,8)
       }
     }
   },
   created(){
-    this.$axios.get('getBlogs.php',{
-      params:{
-        u_id:this.$route.params.u_id || 1
-      }
-    })
-    .then(res=>{
-      let error_code = res.data.error_code;
-      switch(error_code) {
-        case 0:
-          this.blogs = res.data.data;
-          break;
-        case 1221:
-          alert('该博客账号不存在！');
-          break;
-        default:
-          alert(`服务异常:${error_code}`);
+    this.getBlogs({})
+  },
+  methods:{
+    getBlogs(){
+      this.$axios.get('/getBlogs.php',{
+        params:{
+          u_id:this.$route.query.u_id,
+          category_id:this.$route.query.category_id
         }
-    })
+      })
+      .then(res=>{
+        if(!res.data.status_code){
+          this.blogs = res.data.blogs;
+          this.blogs.sort((a,b)=>a.create_time<b.create_time)
+        }else{
+          alert(res.data.error_msg)
+        }
+      })
+    }
+  },
+  watch:{
+    $route:function(to,from) {
+      // 使用watch解决路由在相同组件下跳转数据不刷新问题
+      this.getBlogs();
+    }
   }
 }
+
 </script>
 
 <style scoped>
 .showBlogs{
   max-width: 800px;
   margin: 0 auto;
-  padding: 50px 0;
+  padding: 50px 10px;
 }
 h2{
   font-size: 30px;
@@ -67,5 +76,10 @@ h2{
 }
 a{
   text-decoration: none;
+  color: #000;
+}
+a:hover{
+  text-decoration: underline;
+  color: #ccc;
 }
 </style>

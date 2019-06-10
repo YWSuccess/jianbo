@@ -1,6 +1,6 @@
 <template>
   <div class="addBlog">
-    <editBlog type="1"></editBlog>
+    <editBlog type="add"></editBlog>
   </div>
 </template>
 

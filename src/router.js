@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import VueRouter from 'vue-router'
 import register from './components/register'
 import login from './components/login'
@@ -6,41 +7,47 @@ import editBlog from './components/editBlog'
 import showBlog from './components/showBlog'
 import showBlogs from './components/showBlogs'
 
+Vue.use(VueRouter)
+
 const routes = [
-	{
-		path:'/register',
-		component:register
-	},
-	{
-		path:'/login',
-		component:login
-	},
-	{
-		path:'/addBlog',
+  {
+    path:'/register',
+    component:register
+  },
+  {
+    path:'/login',
+    component:login
+  },
+  {
+    path:'/addBlog',
     meta:{
       login_required:true
     },
-		component:addBlog
-	},
+    component:addBlog
+  },
   {
-    path:'/editBlog',
+    path:'/editBlog/:blog_id',
     meta:{
       login_required:true
     },
     component:editBlog
   },
-	{
-		path:'/blog/:blog_id',
-		component:showBlog
-	},
-	{
-		path:'/:u_id',
-		component:showBlogs
-	},
-	{
-		path:'/',
-		component:showBlogs
-	},
+  {
+    path:'/blog/:blog_id',
+    component:showBlog
+  },
+  {
+    path:'/blogs',
+    component:showBlogs
+  },
+  {
+    path:'/user/:u_id',
+    component:showBlogs
+  },
+  {
+    path:'/',
+    component:showBlogs
+  },
 ]
 
 const router = new VueRouter({

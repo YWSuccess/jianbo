@@ -2,10 +2,11 @@
   <div class="login">
     <form>
       <h2>登录</h2>
-      <input v-model="username" placeholder="账号" @blur="check">
-      <input v-model="password" type="password" placeholder="密码" @keyup="check">
+      <input v-model.trim="username" placeholder="账号">
+      <input v-model.trim="password" type="password" placeholder="密码">
+      <label><input type="checkbox" v-model="remeber">记住我(不是个人电脑不要勾选此项)</label>
       <router-link to="/register">没有账号？立即注册</router-link>
-      <input :disabled="!allowed" :class="{allowed:allowed}" type="submit" value="登 录" @click.prevent="login">
+      <input type="submit" value="登 录" @click.prevent="login">
     </form>
   </div>
 </template>
@@ -17,41 +18,43 @@ export default {
     return {
       username:'',
       password:'',
-      allowed:false
-    }
-  },
-  methods:{
-    check(){
-      if(this.username && this.password){
-        this.allowed = true;
-      }else{
-        this.allowed = false;
-      }
-    },
-    login(){
-      this.$axios.post('/login.php',{
-        username:this.username,
-        password:this.password
-      })
-      .then(res=>{
-        let error_code = res.data.error_code;
-        switch(error_code){
-          case 0:
-            break;
-          case 1221:
-            alert('该博客账号不存在！');
-            break;
-          case 1222:
-            alert('密码错误！');
-            break;
-          default:
-            alert(`服务异常:${error_code}`);
-        }
-      })
+      remeber:false,
+      uPattern : /^[\u4e00-\u9fa5_a-zA-Z0-9_]{4,12}$/,
+      pPattern : /^.*(?=.{6,12})(?=.*\d)(?=.*[a-zA-Z]).*$/
     }
   },
   created(){
-    this.username = this.$route.query.username
+    this.username = this.$route.query.username || ''
+  },
+  methods:{
+    check(){
+      if(!this.uPattern.test(this.username)){
+        alert('请输入正确的账号！');
+        return false
+      }else if(!this.pPattern.test(this.password)){
+        alert('请输入正确的密码！');
+        return false
+      }else{
+        return true
+      }
+    },
+    login(){
+      if(this.check()){
+        this.$axios.post('/login.php',{
+          username:this.username,
+          password:this.password,
+          remeber:this.remeber
+        })
+        .then(res=>{
+          if(!res.data.status_code){
+            this.$store.commit('updateIsLogin',this.$cookies.isKey('u_id'));
+            this.$router.push({path:'/blogs',query:{u_id:this.$cookies.get('u_id')}})
+          }else{
+            alert(res.data.error_msg)
+          }
+        })
+      }
+    }
   }
 }
 </script>
@@ -83,9 +86,18 @@ input{
 input[type="submit"]{
   border: none;
   color:#fff;
-  background-color: #ccc;
-}
-input.allowed{
   background-color: #10a7b8;
+  cursor:pointer;
+}
+input[type="checkbox"]{
+  vertical-align: middle;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  float: left;
+}
+a{
+  float: right;
 }
 </style>

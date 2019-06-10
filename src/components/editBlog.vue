@@ -3,13 +3,13 @@
     <form>
       <h2>{{htmlValue.h2Value}}</h2>
       <select v-model="blog.category_id" @change="categoryChange">
-        <option v-for="category,index in categories" :key="index" :value="category.category_id">{{category.category_name}}</option>
+        <option v-for="category,index in categories" :key="index" :value="category.category_id">{{category.name}}</option>
         <option value="_addCategory">添加分类</option>
       </select>
-      <input v-model="blog.title" placeholder="博客标题" @blur="check">
+      <input v-model.trim="blog.title" placeholder="博客标题">
       <label><input type="checkbox" v-model="blog.private">仅本人可见</label>
       <mark-down ref="markdown" @on-save="save" :initialValue="blog.content"></mark-down>
-      <input :disabled="!allowed" :class="{allowed:allowed}" type="submit" :value="htmlValue.submitValue" @click.prevent="sendBlog">
+      <input type="submit" :value="htmlValue.submitValue" @click.prevent="sendBlog">
     </form>
   </div>
 </template>
@@ -31,8 +31,7 @@ export default {
         content:'',
         category_id:null,
         private:false
-      },
-      allowed:false
+      }
     }
   },
   components:{
@@ -45,20 +44,14 @@ export default {
       }
     })
     .then(res=>{
-      let error_code = res.data.error_code;
-      switch(error_code){
-        case 0:
-          this.categories = res.data.data;
-          this.blog.category_id = this.categories[0]['category_id'];
-          break;
-        case 1221:
-          alert('该博客账号不存在！');
-          break;
-        default:
-          alert(`服务异常:${error_code}`);
+      if(!res.data.status_code){
+        this.categories = res.data.categories;
+        this.blog.category_id = this.categories[0]['category_id']
+      }else{
+        alert(res.data.error_msg)
       }
     })
-    if(this.type==1){
+    if(this.type==="add"){
       this.htmlValue = {
         h2Value:'发表博客',
         submitValue:'发表博客'
@@ -70,44 +63,31 @@ export default {
         }
       })
       .then(res=>{
-        let error_code = res.data.error_code;
-        switch(error_code){
-          case 0:
-            this.blog = res.data.data;
-            break;
-          case 1231:
-            alert('该博客不存在！');
-            break;
-          default:
-            alert(`服务异常:${error_code}`);
-          }
+        if(!res.data.status_code){
+          this.blog = res.data.blog;
+        }else{
+          alert(res.data.error_msg)
+        }
       })
     }
   },
   methods:{
     categoryChange(e){
       if(e.target.value=="_addCategory"){
-        let category_name = prompt("请输入分类名字");
-        if(category_name){
+        let name = prompt("请输入分类名字");
+        if(name){
           this.$axios.post('/addCategory.php',{
-            category_name:category_name
+            name:name
           })
           .then(res=>{
-            let error_code = res.data.error_code;
-            switch(error_code){
-              case 0:
-                this.categories.push({
+            if(!res.data.status_code){
+              this.categories.push({
                   category_id:res.data.category_id,
-                  category_name:category_name
-                });
-                this.blog.category_id = res.data.category_id;
-                break;
-              case 1241:
-                alert('分类数量上限！');
-                this.blog.category_id = this.categories[0]['category_id'];
-                break;
-              default:
-                alert(`服务异常:${error_code}`);
+                  name:name
+              });
+              this.blog.category_id = res.data.category_id;
+            }else{
+              alert(res.data.error_msg)
             }
           },res=>{
             this.blog.category_id = this.categories[0]['category_id'];
@@ -121,26 +101,34 @@ export default {
       this.blog.content = res.value;
     },
     check(){
-      if(this.blog.title && this.blog.category_id){
-        this.allowed = true;
+      this.$refs.markdown.handleSave();
+      if(!this.blog.category_id){
+        alert('分类不能为空！');
+        return false
+      }else if(!this.blog.title){
+        alert('标题不能为空！');
+        return false
+      }else if(!this.blog.content){
+        alert('请先填写博客内容！');
+        return false
       }else{
-        this.allowed = false;
+        return true
       }
     },
     sendBlog(){
-      this.$refs.markdown.handleSave();
-      let sendURL = '/editBlog.php';
-      if(this.type==1) sendURL = '/addBlog.php';
-      this.$axios.post(sendURL,this.blog)
-      .then(res=>{
-        let error_code = res.data.error_code;
-        switch(error_code){
-          case 0:
-            break;
-          default:
-            alert(`服务异常:${error_code}`);
-        }
-      })
+      if(this.check()){
+        const sendURL = this.type==='add'?'/addBlog.php':'/editBlog.php';
+        this.$axios.post(sendURL,this.blog)
+        .then(res=>{
+          if(!res.data.status_code){
+            const alertMsg = this.type==='add'?'发表成功！':'更新成功！';
+            alert(alertMsg);
+            this.$router.push({path:`/blog/${res.data.blog_id}`})
+          }else{
+            alert(res.data.error_msg)
+          }
+        })
+      }
     }
   }
 }
@@ -155,6 +143,7 @@ export default {
 h2{
   font-size: 30px;
   margin: 10px 0;
+  text-align: center;
 }
 select{
   max-width:150px;
@@ -185,7 +174,7 @@ input[type="submit"]{
   width: 100%;
   border: none;
   color:#fff;
-  background-color: #ccc;
+  background-color: #10a7b8;
 }
 input[type="checkbox"]{
   vertical-align: middle;
@@ -194,8 +183,5 @@ input[type="checkbox"]{
   height: 15px;
   margin: 0;
   padding: 0;
-}
-input.allowed{
-  background-color: #10a7b8;
 }
 </style>
