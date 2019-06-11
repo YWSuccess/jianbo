@@ -2,10 +2,13 @@
   <div class="showBlogs">
     <h2>博客列表</h2>
      <div v-for="blog,index in blogs" :key="index" class="blog">
-        <h2><router-link v-rainbow="Math.random()" :to="'/blog/'+blog.blog_id">{{blog.title}}</router-link></h2>
-        <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
-        <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
+        <h2>
+          <router-link v-rainbow="Math.random()" :to="'/blog/'+blog.blog_id">{{blog.title}}</router-link>
+          <span v-if="blog.private" style="font-size:16px;color:#999">[仅自己可见]</span>
+        </h2>
         <span>发表时间：{{blog.create_time}}</span>
+        <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
+        <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
      </div>
   </div>
 </template>
@@ -26,7 +29,7 @@ export default {
     }
   },
   created(){
-    this.getBlogs({})
+    this.getBlogs()
   },
   methods:{
     getBlogs(){
@@ -76,7 +79,7 @@ h2{
 }
 a{
   text-decoration: none;
-  color: #000;
+  color: #89b5ff;
 }
 a:hover{
   text-decoration: underline;

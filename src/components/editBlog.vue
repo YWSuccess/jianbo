@@ -65,6 +65,7 @@ export default {
       .then(res=>{
         if(!res.data.status_code){
           this.blog = res.data.blog;
+
         }else{
           alert(res.data.error_msg)
         }
@@ -123,7 +124,7 @@ export default {
           if(!res.data.status_code){
             const alertMsg = this.type==='add'?'发表成功！':'更新成功！';
             alert(alertMsg);
-            this.$router.push({path:`/blog/${res.data.blog_id}`})
+            this.$router.push({path:`/blog/${this.blog.blog_id}`})
           }else{
             alert(res.data.error_msg)
           }

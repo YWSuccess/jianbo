@@ -1,12 +1,12 @@
 <template>
   <div class="showBlog">
-    <h2>{{blog.title}}</h2>
+    <h2>{{blog.title}}<span v-if="blog.private" style="font-size:16px;color:#999">[仅自己可见]</span></h2>
     <div class="infos">
-      <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
-      <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
       <span>发表时间：{{blog.create_time}}</span>
-      <span><router-link :to="{path:'/editBlog',params:{blog_id:blog.blog_id}}">编辑博客</router-link></span>
-      <a href="javascript:;" @click="deleteBlog">删除博客</a>
+      <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
+      <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
+      <span v-if="this.$store.state.isLogin"><router-link :to="'/editBlog/'+blog.blog_id">编辑博客</router-link></span>
+      <a v-if="this.$store.state.isLogin" href="javascript:;" @click="deleteBlog">删除博客</a>
     </div>
     <mark-down ref="markdown" :previewStatus="2" :initialValue="blog.content" :showTools="false"></mark-down>
     <div class="last_edit_time">最后更新时间：{{blog.last_edit_time}}</div>
@@ -93,10 +93,9 @@ h2{
 }
 a{
   text-decoration: none;
-  color: #000;
+  color: #0366d6;
 }
 a:hover{
   text-decoration: underline;
-  color: #ccc;
 }
 </style>
