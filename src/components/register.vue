@@ -30,7 +30,7 @@ export default {
   methods:{
     check(){
       if(!this.uPattern.test(this.username)){
-        alert('账号需为6-12位数字、字母的组合！');
+        alert('账号需为4-12位数字、字母的组合！');
         return false
       }else if(!this.pPattern.test(this.password)){
         alert('密码需为6-12位数字、字母、下划线的组合！');

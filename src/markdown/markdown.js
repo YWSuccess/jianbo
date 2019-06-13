@@ -98,13 +98,11 @@ export default {
       }
     }
   },
-  created(){
-    if(this.preview==2){
-      this.height = this.initialValue.split('\n').length * 22 + 200;
-    }
-  },
   mounted() {
     this.init();
+    if(this.preview==2){
+      this.editorHeight = this.initialValue.split('\n').length * 22 + 200;
+    }
     setTimeout(() => {
       const textarea = this.$refs.textarea;
       textarea.focus();

@@ -65,7 +65,10 @@ export default {
       .then(res=>{
         if(!res.data.status_code){
           this.blog = res.data.blog;
-
+          if(this.blog.u_id!=this.$cookies.get('u_id')){
+            alert('只有作者可编辑哦！');
+            this.$router.push(`/blog${this.blog.blog_id}`)
+          }
         }else{
           alert(res.data.error_msg)
         }
@@ -122,9 +125,13 @@ export default {
         this.$axios.post(sendURL,this.blog)
         .then(res=>{
           if(!res.data.status_code){
-            const alertMsg = this.type==='add'?'发表成功！':'更新成功！';
-            alert(alertMsg);
-            this.$router.push({path:`/blog/${this.blog.blog_id}`})
+            if(this.type==='add'){
+              alert('发表成功！');
+              this.$router.push({path:`/blog/${res.data.blog_id}`})
+            }else{
+              alert('更新成功！');
+              this.$router.push({path:`/blog/${this.blog.blog_id}`})
+            }
           }else{
             alert(res.data.error_msg)
           }
@@ -139,7 +146,7 @@ export default {
 .editBlog{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 5%;
+  padding: 100px 5%;
 }
 h2{
   font-size: 30px;

@@ -10,6 +10,9 @@
         <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
         <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
      </div>
+     <div :v-if="!blogs" class="blog">
+       <h2><router-link to="/blog/1">暂时还没有博客~来看看Markdown使用指南吧</router-link></h2>
+     </div>
   </div>
 </template>
 
@@ -63,7 +66,7 @@ export default {
 .showBlogs{
   max-width: 800px;
   margin: 0 auto;
-  padding: 50px 10px;
+  padding: 100px 10px;
 }
 h2{
   font-size: 30px;

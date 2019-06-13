@@ -5,6 +5,7 @@ import router from './router'
 import store from './vuex/store'
 import App from './App'
 
+window.Promise = Promise;
 Vue.config.productionTip = false
 
 Vue.prototype.$axios = axios

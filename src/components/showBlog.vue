@@ -5,8 +5,8 @@
       <span>发表时间：{{blog.create_time}}</span>
       <span>分类：<router-link :to="{path:'/blogs',query:{category_id:blog.category_id}}">{{blog.name}}</router-link></span>
       <span>作者：<router-link :to="{path:'/blogs',query:{u_id:blog.u_id}}">{{blog.username}}</router-link></span>
-      <span v-if="this.$store.state.isLogin"><router-link :to="'/editBlog/'+blog.blog_id">编辑博客</router-link></span>
-      <a v-if="this.$store.state.isLogin" href="javascript:;" @click="deleteBlog">删除博客</a>
+      <span v-if="editPower"><router-link :to="'/editBlog/'+blog.blog_id">编辑博客</router-link></span>
+      <a v-if="editPower" href="javascript:;" @click="deleteBlog">删除博客</a>
     </div>
     <mark-down ref="markdown" :previewStatus="2" :initialValue="blog.content" :showTools="false"></mark-down>
     <div class="last_edit_time">最后更新时间：{{blog.last_edit_time}}</div>
@@ -19,6 +19,7 @@ export default {
   name:'showBlog',
   data(){
     return{
+      editPower:false,
       blog:{
         title:'',
         content:''
@@ -36,9 +37,11 @@ export default {
     })
     .then(res=>{
       if(!res.data.status_code){
-        this.blog = res.data.blog
+        this.blog = res.data.blog;
+        this.editPower = this.$cookies.isKey('u_id') && this.blog.u_id ==this.$cookies.get('u_id')
       }else{
-        alert(res.data.error_msg)
+        alert(res.data.error_msg);
+        this.$router.push('/')
       }
     })
   },
@@ -68,7 +71,7 @@ export default {
 .showBlog{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 10px 50px;
+  padding: 100px 10px 50px;
   background-color: #f1f1f1;
   border-radius: 5px;
 }

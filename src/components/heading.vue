@@ -1,9 +1,11 @@
 <template>
   <div class="heading">
-    <h1><router-link to="/">简 博</router-link></h1>
-    <span class="login" @click="toLogin"></span>
-    <span v-if="this.$store.state.isLogin" class="addBlog" @click="toAddBlog"></span>
-    <span v-if="this.$store.state.isLogin" class="logout" @click="toLogout"></span>
+    <div class="nav">
+      <h1><router-link to="/">简 博</router-link></h1>
+      <span class="login" @click="toLogin"></span>
+      <span v-if="this.$store.state.isLogin" class="addBlog" @click="toAddBlog"></span>
+      <span v-if="this.$store.state.isLogin" class="logout" @click="toLogout"></span>
+    </div>
   </div>
 </template>
 
@@ -44,12 +46,18 @@ export default {
 
 <style scoped>
 .heading{
+  width: 100%;
+  position: fixed;
+  z-index:999;
+}
+.nav{
+  max-width: 100%;
+  background-color: #10a7b8;
+  text-align: center;
   max-width: 100%;
   padding: 20px;
-  margin: 0 auto;
-  text-align: center;
-  background-color: #10a7b8;
   position: relative;
+  margin: 0 auto;
   color: #fff;
 }
 .login{
