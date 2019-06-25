@@ -100,8 +100,7 @@ h2{
   max-width: 100%;
   margin: 10px 0 ;
   padding: 20px;
-  background-color: #fff;
-  border: 1px dotted #000;
+  background-color: #eee;
   border-radius: 5px;
 }
 a{
