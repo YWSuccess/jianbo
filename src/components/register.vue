@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name:'register',
+  name:'Register',
   data(){
     return {
       username:'',
@@ -56,6 +56,7 @@ export default {
         })
         .then(res=>{
           if(!res.data.status_code){
+            // 注册成功后跳转到登录界面
             alert('注册成功！');
             this.$router.push({path:'/login',query:{username:this.username}})
           }else{

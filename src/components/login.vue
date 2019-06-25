@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name:'login',
+  name:'Login',
   data(){
     return {
       username:'',
@@ -47,7 +47,9 @@ export default {
         })
         .then(res=>{
           if(!res.data.status_code){
+            // 更新登录状态
             this.$store.commit('updateIsLogin',this.$cookies.isKey('u_id'));
+            // 登录成功后跳转到展示博客界面
             this.$router.push({path:'/blogs',query:{u_id:this.$cookies.get('u_id')}})
           }else{
             alert(res.data.error_msg)

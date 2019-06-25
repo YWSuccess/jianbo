@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import MarkDown from '../markdown/index';
+import MarkDown from './markdown/index';
 export default {
-  name:'editBlog',
+  name:'EditBlog',
   props:['type'],
   data(){
     return{
@@ -38,6 +38,7 @@ export default {
     MarkDown
   },
   created(){
+    // 初始化博客分类
     this.$axios.get('/getCategories.php',{
       params:{
         u_id:this.$cookies.get('u_id')
@@ -51,12 +52,14 @@ export default {
         alert(res.data.error_msg)
       }
     })
+    // 根据传入的操作类型来动态渲染
     if(this.type==="add"){
       this.htmlValue = {
         h2Value:'发表博客',
         submitValue:'发表博客'
       }
     }else{
+      // 操作类型为更新博客，初始化编辑器
       this.$axios.get('/getBlog.php',{
         params:{
           blog_id:this.$route.params.blog_id,
@@ -65,6 +68,7 @@ export default {
       .then(res=>{
         if(!res.data.status_code){
           this.blog = res.data.blog;
+          // 判断用户是否有权限编辑该博客
           if(this.blog.u_id!=this.$cookies.get('u_id')){
             alert('只有作者可编辑哦！');
             this.$router.push(`/blog${this.blog.blog_id}`)
@@ -76,6 +80,7 @@ export default {
     }
   },
   methods:{
+    // 新增博客分类
     categoryChange(e){
       if(e.target.value=="_addCategory"){
         let name = prompt("请输入分类名字");
@@ -89,6 +94,7 @@ export default {
                   category_id:res.data.category_id,
                   name:name
               });
+              // 新增分类成功后切换博客分类到最新添加的分类
               this.blog.category_id = res.data.category_id;
             }else{
               alert(res.data.error_msg)
@@ -101,10 +107,12 @@ export default {
         }
       }
     },
+    // 将编辑器的内容同步到blog上
     save(res){
       this.blog.content = res.value;
     },
     check(){
+      // 调用markdown组件的handleSave方法来同步blog
       this.$refs.markdown.handleSave();
       if(!this.blog.category_id){
         alert('分类不能为空！');
@@ -121,6 +129,7 @@ export default {
     },
     sendBlog(){
       if(this.check()){
+        // 根据不同操作类型动态处理
         const sendURL = this.type==='add'?'/addBlog.php':'/editBlog.php';
         this.$axios.post(sendURL,this.blog)
         .then(res=>{

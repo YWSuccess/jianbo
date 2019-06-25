@@ -1,5 +1,5 @@
 <template>
-  <div class="heading">
+  <div class="header">
     <div class="nav">
       <h1><router-link to="/">简 博</router-link></h1>
       <span class="login" @click="toLogin"></span>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name:'heading',
+  name:'Header',
   data(){
     return{
       
@@ -35,6 +35,7 @@ export default {
       this.$axios.get('/logout.php')
       .then(res=>{
         if(res.data.status_code==0){
+          // 用户退出后更新登录状态，保证正确渲染菜单项
           this.$store.commit('updateIsLogin',this.$cookies.isKey('u_id'))
           this.$router.push('/login')
         }
@@ -45,7 +46,7 @@ export default {
 </script>
 
 <style scoped>
-.heading{
+.header{
   width: 100%;
   position: fixed;
   z-index:999;

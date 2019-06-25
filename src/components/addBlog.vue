@@ -1,19 +1,19 @@
 <template>
   <div class="addBlog">
-    <editBlog type="add"></editBlog>
+    <EditBlog type="add"></EditBlog>
   </div>
 </template>
 
 <script>
-import editBlog from './editBlog';
+import EditBlog from './EditBlog';
 export default {
-  name:'addBlog',
+  name:'AddBlog',
   data(){
     return{
     }
   },
   components:{
-    editBlog
+    EditBlog
   }
 }
 </script>

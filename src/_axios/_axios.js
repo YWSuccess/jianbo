@@ -5,6 +5,7 @@ const instance = axios.create({
   headers: {'content-type': 'application/x-www-form-urlencoded;charset=utf-8'}
 })
 
+// 拦截post请求，格式化数据
 instance.interceptors.request.use(
   config => {
     if(config.method === 'post')
