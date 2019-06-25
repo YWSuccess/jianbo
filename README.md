@@ -1,6 +1,6 @@
-# blog
+# jianbo
 
-> Vue+PHP编写的博客系统
+> 本项目是由Vue+PHP编写的多用户博客平台。实现了用户管理，发表博客（支持markdown），博客分类，搜索，评论等功能。
 
 ## Build Setup
 
@@ -17,5 +17,3 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
